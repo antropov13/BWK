@@ -10,7 +10,7 @@ namespace BWK
     {
         private String nameKunde;
 
-        public String NameKunde { get { return nameKunde; } set { } }
+        public String NameKunde { get { return nameKunde; } set { nameKunde = value; } }
 
         public Kunde(String name)
         {
