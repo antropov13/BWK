@@ -232,6 +232,18 @@ namespace BWK
             dataGridViewTable.Rows.Add(row);
         }
 
+        private void DataGridViewTableFazit(ArrayList arrayList)
+        {
+            DataGridViewRow row = (DataGridViewRow)dataGridViewTable.Rows[0].Clone();
+            int y = 0;
+            foreach (Object o in arrayList)
+            {
+                row.Cells[y].Value = o;
+                y++;
+            }
+            dataGridViewTable.Rows.Add(row);
+        }
+
         private void buttonMountAuswähl_Click(object sender, EventArgs e)
         {
             string mount = comboBoxMounts.SelectedItem.ToString();
@@ -255,30 +267,59 @@ namespace BWK
 
             dataGridViewTable.Rows.Clear();
             ArrayList arrFahrerFahrt = new ArrayList();
+            ArrayList arrFahrerFahrtFazit = new ArrayList();
             List<Fahrt> fahrtList = fahrer.Fahrten;
             int i = 1;
+            int kmFazit = 0;
+            float betragFahrtFazit = 0;
+            float exstrasFahrtFazit = 0;
+            int kmFahrerFazit = 0;
+            float betragFahrerFazit = 0;
+            float bemergungFazit = 0;
+
             foreach(Fahrt f in fahrtList)
             {
                 arrFahrerFahrt.Clear();
                 arrFahrerFahrt.Add(i);
                 arrFahrerFahrt.Add(f.Kunde.NameKunde);
                 arrFahrerFahrt.Add(f.Fahrer.NameFahrer);
-                arrFahrerFahrt.Add(f.Date);
+                arrFahrerFahrt.Add(f.Date.ToString("d"));
                 arrFahrerFahrt.Add(f.Fahrzeug);
                 arrFahrerFahrt.Add(f.Abholung);
                 arrFahrerFahrt.Add(f.Zustellung);
                 arrFahrerFahrt.Add(f.KmFahrt);
+                kmFazit += f.KmFahrt;
                 arrFahrerFahrt.Add(f.PreisKmFahrt);
                 arrFahrerFahrt.Add(f.BetragFahrt);
+                betragFahrtFazit += f.BetragFahrt;
                 arrFahrerFahrt.Add(f.MautFahrt);
+                exstrasFahrtFazit += f.MautFahrt;
                 arrFahrerFahrt.Add(f.KmFahrer);
+                kmFahrerFazit += f.KmFahrer;
                 arrFahrerFahrt.Add(f.BetragFahrer);
+                betragFahrerFazit += f.BetragFahrer;
                 arrFahrerFahrt.Add(f.BemerkungText);
                 arrFahrerFahrt.Add(f.BemerkungPreis);
+                bemergungFazit += f.BemerkungPreis;
                 DataGridViewTable(arrFahrerFahrt);
                 i++;
                 //Debug.WriteLine(f.Kunde.NameKunde);
             }
+            DataGridViewRow row = (DataGridViewRow)dataGridViewTable.Rows[0].Clone();
+            dataGridViewTable.Rows.Add(row);
+
+            row = (DataGridViewRow)dataGridViewTable.Rows[0].Clone();
+            row.Cells[7].Value = kmFazit;
+            row.Cells[9].Value = betragFahrtFazit;
+            row.Cells[10].Value = exstrasFahrtFazit;
+            row.Cells[11].Value = kmFahrerFazit;
+            row.Cells[12].Value = betragFahrerFazit;
+            row.Cells[14].Value = bemergungFazit;
+            dataGridViewTable.Rows.Add(row);
+            //arrFahrerFahrtFazit.Add(kmFazit);
+            //arrFahrerFahrtFazit.Add(betragFahrtFazit);
+
+
         }
 
         private void dataGridViewTable_CellContentClick(object sender, DataGridViewCellEventArgs e)

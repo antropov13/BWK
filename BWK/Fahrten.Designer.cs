@@ -79,7 +79,7 @@
             this.buttonMountAuswähl.Name = "buttonMountAuswähl";
             this.buttonMountAuswähl.Size = new System.Drawing.Size(117, 21);
             this.buttonMountAuswähl.TabIndex = 2;
-            this.buttonMountAuswähl.Text = "Mount auszuwählen";
+            this.buttonMountAuswähl.Text = "Mount";
             this.buttonMountAuswähl.UseVisualStyleBackColor = true;
             this.buttonMountAuswähl.Click += new System.EventHandler(this.buttonMountAuswähl_Click);
             // 
@@ -94,10 +94,10 @@
             // comboBoxKunde
             // 
             this.comboBoxKunde.FormattingEnabled = true;
-            this.comboBoxKunde.Location = new System.Drawing.Point(7, 126);
+            this.comboBoxKunde.Location = new System.Drawing.Point(11, 125);
             this.comboBoxKunde.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxKunde.Name = "comboBoxKunde";
-            this.comboBoxKunde.Size = new System.Drawing.Size(96, 21);
+            this.comboBoxKunde.Size = new System.Drawing.Size(92, 21);
             this.comboBoxKunde.TabIndex = 4;
             // 
             // buttonFahrerInfo
@@ -107,7 +107,7 @@
             this.buttonFahrerInfo.Name = "buttonFahrerInfo";
             this.buttonFahrerInfo.Size = new System.Drawing.Size(117, 21);
             this.buttonFahrerInfo.TabIndex = 5;
-            this.buttonFahrerInfo.Text = "Über Fahrer zeigen";
+            this.buttonFahrerInfo.Text = "Fahrer";
             this.buttonFahrerInfo.UseVisualStyleBackColor = true;
             this.buttonFahrerInfo.Click += new System.EventHandler(this.buttonFahrerInfo_Click);
             // 
@@ -118,7 +118,7 @@
             this.buttonKundeInfo.Name = "buttonKundeInfo";
             this.buttonKundeInfo.Size = new System.Drawing.Size(117, 21);
             this.buttonKundeInfo.TabIndex = 6;
-            this.buttonKundeInfo.Text = "Über Kunde zeigen";
+            this.buttonKundeInfo.Text = "Kunde";
             this.buttonKundeInfo.UseVisualStyleBackColor = true;
             // 
             // dataGridViewTable
