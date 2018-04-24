@@ -14,24 +14,67 @@ namespace BWK
         List<Fahrer> fahrerList = new List<Fahrer>();
         List<Kunde> kundenList = new List<Kunde>();
         List<String> sheetName = new List<String>();
+        string path = "";// = Environment.CurrentDirectory + "\\";
         Excel.Application ObjWorkExcel;
         Excel.Workbook ObjWorkBook;
 
         public Fahrten()
         {
             InitializeComponent();
-            String path = Environment.CurrentDirectory + "\\Table\\Fahrten_2018_2.xlsx";
-            ObjWorkExcel = new Excel.Application(); //открыть эксель
-            ObjWorkBook = ObjWorkExcel.Workbooks.Open(path, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing); //открыть файл
-            foreach (Excel.Worksheet worksheet in ObjWorkBook.Worksheets)
-            {
-                sheetName.Add(worksheet.Name);
-            }
-            FuellungMouts();
+            ErstellungPathFahrerTable();
+            //PruefungTable();
+            //path += "Table\\Fahrten_2018_2.xlsx";
+            //PruefungTable();
+
+
+            //ObjWorkExcel = new Excel.Application(); //открыть эксель
+            //ObjWorkBook = ObjWorkExcel.Workbooks.Open(path, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing); //открыть файл
+            //foreach (Excel.Worksheet worksheet in ObjWorkBook.Worksheets)
+            //{
+            //    sheetName.Add(worksheet.Name);
+            //}
+            //FuellungMouts();
             
         }
 
-        public void FuellungMouts()
+        public void NeuFahrtenTable(string _path)
+        {
+            this.path = _path;
+            Debug.WriteLine(this.path);
+            ErstellungPathFahrerTable();
+        }
+
+        public void ErstellungPathFahrerTable()
+        {
+            if (path.Equals(""))
+            {
+                buttonMountAuswähl.Enabled = false;
+                buttonFahrerInfo.Enabled = false;
+                buttonKundeInfo.Enabled = false;
+                buttonLadungFahrtenTable.Enabled = false;
+            }
+            else
+            {
+                buttonMountAuswähl.Enabled = true;
+                buttonFahrerInfo.Enabled = true;
+                buttonKundeInfo.Enabled = true;
+                buttonLadungFahrtenTable.Enabled = true;
+            }
+        }
+
+        public void PruefungTable()
+        {
+            if (path.IndexOf(".xlsx") < 0)
+            {
+                Debug.WriteLine(path);
+                FahrtenTable fahrtenTable = new FahrtenTable(this, path);
+                fahrtenTable.Show();
+
+            }
+            //else Debug.WriteLine("123");
+        }
+
+            public void FuellungMouts()
         {
             int mount = DateTime.Now.Month - 2;
 
@@ -325,6 +368,28 @@ namespace BWK
         private void dataGridViewTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void kundenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fahrerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FahrtenTable fahrtenTable = new FahrtenTable(this, path);
+            fahrtenTable.Show();
+        }
+
+        private void buttonLadungFahrtenTable_Click(object sender, EventArgs e)
+        {
+            ObjWorkExcel = new Excel.Application(); //открыть эксель
+            ObjWorkBook = ObjWorkExcel.Workbooks.Open(path, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing); //открыть файл
+            foreach (Excel.Worksheet worksheet in ObjWorkBook.Worksheets)
+            {
+                sheetName.Add(worksheet.Name);
+            }
+            FuellungMouts();
         }
     }
 }

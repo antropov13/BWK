@@ -51,14 +51,21 @@
             this.Fahrer_Betrag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Bemerkung_Typ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Bemerkung_Betrag = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.fahrerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.kundenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.kundenToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonLadungFahrtenTable = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTable)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxFahrer
             // 
             this.comboBoxFahrer.FormattingEnabled = true;
-            this.comboBoxFahrer.Location = new System.Drawing.Point(11, 87);
-            this.comboBoxFahrer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxFahrer.Location = new System.Drawing.Point(11, 137);
+            this.comboBoxFahrer.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxFahrer.Name = "comboBoxFahrer";
             this.comboBoxFahrer.Size = new System.Drawing.Size(92, 21);
             this.comboBoxFahrer.TabIndex = 0;
@@ -66,16 +73,16 @@
             // comboBoxMounts
             // 
             this.comboBoxMounts.FormattingEnabled = true;
-            this.comboBoxMounts.Location = new System.Drawing.Point(11, 52);
-            this.comboBoxMounts.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxMounts.Location = new System.Drawing.Point(11, 102);
+            this.comboBoxMounts.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxMounts.Name = "comboBoxMounts";
             this.comboBoxMounts.Size = new System.Drawing.Size(92, 21);
             this.comboBoxMounts.TabIndex = 1;
             // 
             // buttonMountAuswähl
             // 
-            this.buttonMountAuswähl.Location = new System.Drawing.Point(107, 52);
-            this.buttonMountAuswähl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonMountAuswähl.Location = new System.Drawing.Point(107, 102);
+            this.buttonMountAuswähl.Margin = new System.Windows.Forms.Padding(2);
             this.buttonMountAuswähl.Name = "buttonMountAuswähl";
             this.buttonMountAuswähl.Size = new System.Drawing.Size(117, 21);
             this.buttonMountAuswähl.TabIndex = 2;
@@ -85,8 +92,8 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(7, 163);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.progressBar1.Location = new System.Drawing.Point(7, 213);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(217, 19);
             this.progressBar1.TabIndex = 3;
@@ -94,7 +101,7 @@
             // comboBoxKunde
             // 
             this.comboBoxKunde.FormattingEnabled = true;
-            this.comboBoxKunde.Location = new System.Drawing.Point(11, 125);
+            this.comboBoxKunde.Location = new System.Drawing.Point(11, 175);
             this.comboBoxKunde.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxKunde.Name = "comboBoxKunde";
             this.comboBoxKunde.Size = new System.Drawing.Size(92, 21);
@@ -102,7 +109,7 @@
             // 
             // buttonFahrerInfo
             // 
-            this.buttonFahrerInfo.Location = new System.Drawing.Point(107, 87);
+            this.buttonFahrerInfo.Location = new System.Drawing.Point(107, 137);
             this.buttonFahrerInfo.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFahrerInfo.Name = "buttonFahrerInfo";
             this.buttonFahrerInfo.Size = new System.Drawing.Size(117, 21);
@@ -113,7 +120,7 @@
             // 
             // buttonKundeInfo
             // 
-            this.buttonKundeInfo.Location = new System.Drawing.Point(107, 125);
+            this.buttonKundeInfo.Location = new System.Drawing.Point(107, 175);
             this.buttonKundeInfo.Margin = new System.Windows.Forms.Padding(2);
             this.buttonKundeInfo.Name = "buttonKundeInfo";
             this.buttonKundeInfo.Size = new System.Drawing.Size(117, 21);
@@ -235,11 +242,62 @@
             this.Bemerkung_Betrag.Name = "Bemerkung_Betrag";
             this.Bemerkung_Betrag.Width = 105;
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1429, 24);
+            this.menuStrip1.TabIndex = 8;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fahrerToolStripMenuItem,
+            this.kundenToolStripMenuItem,
+            this.kundenToolStripMenuItem1});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(117, 20);
+            this.toolStripMenuItem1.Text = "Veränderund Table";
+            // 
+            // fahrerToolStripMenuItem
+            // 
+            this.fahrerToolStripMenuItem.Name = "fahrerToolStripMenuItem";
+            this.fahrerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fahrerToolStripMenuItem.Text = "Fahrten";
+            this.fahrerToolStripMenuItem.Click += new System.EventHandler(this.fahrerToolStripMenuItem_Click);
+            // 
+            // kundenToolStripMenuItem
+            // 
+            this.kundenToolStripMenuItem.Name = "kundenToolStripMenuItem";
+            this.kundenToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.kundenToolStripMenuItem.Text = "Fahrer";
+            this.kundenToolStripMenuItem.Click += new System.EventHandler(this.kundenToolStripMenuItem_Click);
+            // 
+            // kundenToolStripMenuItem1
+            // 
+            this.kundenToolStripMenuItem1.Name = "kundenToolStripMenuItem1";
+            this.kundenToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.kundenToolStripMenuItem1.Text = "Kunden";
+            // 
+            // buttonLadungFahrtenTable
+            // 
+            this.buttonLadungFahrtenTable.Location = new System.Drawing.Point(11, 59);
+            this.buttonLadungFahrtenTable.Name = "buttonLadungFahrtenTable";
+            this.buttonLadungFahrtenTable.Size = new System.Drawing.Size(212, 23);
+            this.buttonLadungFahrtenTable.TabIndex = 9;
+            this.buttonLadungFahrtenTable.Text = "Laden Fahrten Table";
+            this.buttonLadungFahrtenTable.UseVisualStyleBackColor = true;
+            this.buttonLadungFahrtenTable.Click += new System.EventHandler(this.buttonLadungFahrtenTable_Click);
+            // 
             // Fahrten
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1429, 561);
+            this.Controls.Add(this.buttonLadungFahrtenTable);
             this.Controls.Add(this.dataGridViewTable);
             this.Controls.Add(this.buttonKundeInfo);
             this.Controls.Add(this.buttonFahrerInfo);
@@ -248,11 +306,16 @@
             this.Controls.Add(this.buttonMountAuswähl);
             this.Controls.Add(this.comboBoxMounts);
             this.Controls.Add(this.comboBoxFahrer);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Fahrten";
             this.Text = "Fahrten";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Fahrten_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTable)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -281,6 +344,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Fahrer_Betrag;
         private System.Windows.Forms.DataGridViewTextBoxColumn Bemerkung_Typ;
         private System.Windows.Forms.DataGridViewTextBoxColumn Bemerkung_Betrag;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem fahrerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem kundenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem kundenToolStripMenuItem1;
+        private System.Windows.Forms.Button buttonLadungFahrtenTable;
     }
 }
 
