@@ -14,14 +14,16 @@ namespace BWK
         List<Fahrer> fahrerList = new List<Fahrer>();
         List<Kunde> kundenList = new List<Kunde>();
         List<String> sheetName = new List<String>();
-        string path = "";// = Environment.CurrentDirectory + "\\";
+        String path = Environment.CurrentDirectory + "\\";
+        String einstellung = Environment.CurrentDirectory + "\\Einstellung.xlsx";
+        String fahrtenTabellePath = "";
         Excel.Application ObjWorkExcel;
         Excel.Workbook ObjWorkBook;
 
         public Fahrten()
         {
             InitializeComponent();
-            ErstellungPathFahrerTable();
+            ErstellungPathFahrenTabelle();
             //PruefungTable();
             //path += "Table\\Fahrten_2018_2.xlsx";
             //PruefungTable();
@@ -39,27 +41,47 @@ namespace BWK
 
         public void NeuFahrtenTable(string _path)
         {
-            this.path = _path;
-            Debug.WriteLine(this.path);
-            ErstellungPathFahrerTable();
+            //this.path = _path;
+            //Debug.WriteLine(this.path);
+            ObjWorkExcel = new Excel.Application(); //открыть эксель
+            ObjWorkBook = ObjWorkExcel.Workbooks.Open(_path, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing); //открыть файл
+            foreach (Excel.Worksheet worksheet in ObjWorkBook.Worksheets)
+            {
+                sheetName.Add(worksheet.Name);
+            }
+            ObjWorkBook.Close(0);
+            ObjWorkExcel.Quit();
+            FuellungMouts();
+            //ErstellungPathFahrenTabelle();
         }
 
-        public void ErstellungPathFahrerTable()
+        public void ErstellungPathFahrenTabelle()
         {
-            if (path.Equals(""))
-            {
-                buttonMountAuswähl.Enabled = false;
-                buttonFahrerInfo.Enabled = false;
-                buttonKundeInfo.Enabled = false;
-                buttonLadungFahrtenTable.Enabled = false;
-            }
-            else
-            {
-                buttonMountAuswähl.Enabled = true;
-                buttonFahrerInfo.Enabled = true;
-                buttonKundeInfo.Enabled = true;
-                buttonLadungFahrtenTable.Enabled = true;
-            }
+            //String einstellung = this.path + "Einstellung.xlsx";
+            //Debug.WriteLine(einstellung);
+            ObjWorkExcel = new Excel.Application(); //открыть эксель
+            ObjWorkBook = ObjWorkExcel.Workbooks.Open(this.einstellung, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing); //открыть файл
+            Excel.Worksheet worksheet = ObjWorkBook.Worksheets["Fahrten"];
+            this.fahrtenTabellePath = this.path + worksheet.Cells[2, 2].Text.ToString();
+            ObjWorkBook.Close(0);
+            ObjWorkExcel.Quit();
+            Debug.WriteLine(fahrtenTabellePath);
+            NeuFahrtenTable(this.fahrtenTabellePath);
+
+            //if (path.Equals(""))
+            //{
+            //buttonMountAuswähl.Enabled = false;
+            buttonFahrerInfo.Enabled = false;
+            buttonKundeInfo.Enabled = false;
+            //buttonLadungFahrtenTable.Enabled = false;
+            // }
+            // else
+            // {
+            //    buttonMountAuswähl.Enabled = true;
+            //buttonFahrerInfo.Enabled = true;
+            //buttonKundeInfo.Enabled = true;
+            //buttonLadungFahrtenTable.Enabled = true;
+            //    }
         }
 
         public void PruefungTable()
@@ -89,7 +111,10 @@ namespace BWK
         public void Fuellung()
         {
             comboBoxFahrer.Items.Clear();
-            
+
+            if (fahrerList.Count>0) buttonFahrerInfo.Enabled = true;
+            else buttonFahrerInfo.Enabled = false;
+
             foreach (Fahrer f in fahrerList)
             {
                 comboBoxFahrer.Items.Add(f);
@@ -99,6 +124,9 @@ namespace BWK
             comboBoxFahrer.DisplayMember = "NameFahrer";
 
             comboBoxKunde.Items.Clear();
+
+            if (kundenList.Count>0) buttonKundeInfo.Enabled = true;
+            else buttonKundeInfo.Enabled = false;
 
             foreach (Kunde k in kundenList)
             {
@@ -132,10 +160,13 @@ namespace BWK
             return null;
         }
 
-        public void ParseTable(string mount, Excel.Workbook ObjWorkBook)
+        public void ParseTable(string mount)
         {
 
             //Debug.WriteLine(ObjWorkSheet.Name);
+            ObjWorkExcel = new Excel.Application(); //открыть эксель
+            ObjWorkBook = ObjWorkExcel.Workbooks.Open(this.fahrtenTabellePath, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing); //открыть файл
+
             Excel.Worksheet ObjWorkSheet = (Excel.Worksheet)ObjWorkBook.Sheets[mount];
             var lastCell = ObjWorkSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell);
             
@@ -156,7 +187,10 @@ namespace BWK
             Regex rgx = new Regex("[^0-9,]");
             ArrayList arrFahrt = new ArrayList();
 
-            for (int i = 7, k=1; i<(int)lastCell.Row; i++, k++)
+            int i = 7;
+            int k = 1;
+
+            for (; i<(int)lastCell.Row; i++, k++)
             {
                 arrFahrt.Add(k);
 
@@ -187,11 +221,20 @@ namespace BWK
 
                 string referenz = "123";//ObjWorkSheet.Cells[i, 5].Text.ToString();
 
-                string fahrzeug = "MZ-" + ObjWorkSheet.Cells[i, 6].Text.ToString() + " <" + ObjWorkSheet.Cells[i, 7].Text.ToString() +">";
-                arrFahrt.Add(fahrzeug);
+                string fahrzeug_mz = ObjWorkSheet.Cells[i, 6].Text.ToString();
+                arrFahrt.Add(fahrzeug_mz);
+
+                string fahrzeug_typ = ObjWorkSheet.Cells[i, 7].Text.ToString();
+                arrFahrt.Add(fahrzeug_typ);
+
+                string abholungPLZ = ObjWorkSheet.Cells[i, 8].Text.ToString();
+                arrFahrt.Add(abholungPLZ);
 
                 string abholung = ObjWorkSheet.Cells[i, 9].Text.ToString();
                 arrFahrt.Add(abholung);
+
+                string zustellungPLZ = ObjWorkSheet.Cells[i, 10].Text.ToString();
+                arrFahrt.Add(zustellungPLZ);
 
                 string zustellung = ObjWorkSheet.Cells[i, 11].Text.ToString();
                 arrFahrt.Add(zustellung);
@@ -248,7 +291,7 @@ namespace BWK
                 }
                 arrFahrt.Add(bemerkungPreisF);
 
-                Fahrt fahrt = new Fahrt(einKunde, einFahrer, date, referenz, fahrzeug, abholung, zustellung, kmFahrt, preisKmFahrt, betragFahrt, mautFahrt, kmFahrer, betragFahrer, bemerkungText, bemerkungPreisF, mount);
+                Fahrt fahrt = new Fahrt(einKunde, einFahrer, date, referenz, fahrzeug_mz, fahrzeug_typ, abholungPLZ, abholung, zustellungPLZ, zustellung, kmFahrt, preisKmFahrt, betragFahrt, mautFahrt, kmFahrer, betragFahrer, bemerkungText, bemerkungPreisF, mount);
                 fahrten.Add(fahrt);
                 einFahrer.AddFahrt(fahrt);
 
@@ -258,7 +301,74 @@ namespace BWK
                 progressBar1.Value += 1;
 
             }
+
+            //Bemerkung für Fahrer
+            string beginn = "";
+            string end = "";
+            Debug.WriteLine("i = " + i);
+            while (!beginn.Equals("Km-Preis"))
+            {
+                i++;
+                beginn = ObjWorkSheet.Cells[i, 28].Text.ToString();
+            }
+            int iii = i;
+            Debug.WriteLine("iii = " + iii);
+            while (!beginn.Equals("END"))
+            {
+                iii++;
+                beginn = ObjWorkSheet.Cells[iii, 28].Text.ToString();
+            }
+            /*
+            int g = 1;
+            while(g<40)
+            {
+
+                String f = ObjWorkSheet.Cells[93, g].Text.ToString();
+                Debug.WriteLine("f = " + f);
+                g++;
+            }
+            Debug.WriteLine("iii = " + iii);
+            */
+            Regex rgx_preis = new Regex("[^0-9,-]");
+            while (!end.Equals("END"))
+            {
+                i++;
+                k = 17;
+                string bemerkungText = ObjWorkSheet.Cells[i, 28].Text.ToString();
+                //string bemerkungPreis = rgx.Replace(ObjWorkSheet.Cells[i, 29].Text.ToString(), "");
+                end = bemerkungText;
+                if (end.Equals("END")) break;
+                if (!end.Equals("")) {
+                    //Debug.WriteLine(i + " - " + bemerkungText);
+                    while(k<28)
+                    {
+                        string preis_str = rgx_preis.Replace(ObjWorkSheet.Cells[i, k].Text.ToString(), "");
+                        if (!preis_str.Equals(""))
+                        {
+                            float preis = float.Parse(preis_str);
+                            string fahrer = ObjWorkSheet.Cells[5, k-1].Text.ToString();
+                            Debug.WriteLine(i + "," + k + " - " + bemerkungText + " = " + preis + " : " + fahrer);
+                            Bemerkung bemerkung = new Bemerkung(bemerkungText, preis);
+                            foreach (Fahrer f in fahrerList)
+                            {
+                                if (f.NameFahrer.Equals(fahrer))
+                                {
+                                    f.AddBemerkung(bemerkung);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        k += 2;
+                    }
+                }
+                
+
+            }
+
             Fuellung();
+            ObjWorkBook.Close(0);
+            ObjWorkExcel.Quit();
             Application.DoEvents();
 
         }
@@ -294,13 +404,13 @@ namespace BWK
             fahrerList.Clear();
             kundenList.Clear();
             dataGridViewTable.Rows.Clear();
-            ParseTable(mount, ObjWorkBook);
+            ParseTable(mount);
         }
 
         private void Fahrten_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ObjWorkBook.Close(0);
-            ObjWorkExcel.Quit();
+            //ObjWorkBook.Close(0);
+            //ObjWorkExcel.Quit();
         }
 
         private void buttonFahrerInfo_Click(object sender, EventArgs e)
@@ -327,8 +437,11 @@ namespace BWK
                 arrFahrerFahrt.Add(f.Kunde.NameKunde);
                 arrFahrerFahrt.Add(f.Fahrer.NameFahrer);
                 arrFahrerFahrt.Add(f.Date.ToString("d"));
-                arrFahrerFahrt.Add(f.Fahrzeug);
+                arrFahrerFahrt.Add(f.Fahrzeug_mz);
+                arrFahrerFahrt.Add(f.Fahrzeug_typ);
+                arrFahrerFahrt.Add(f.AbholungPLZ);
                 arrFahrerFahrt.Add(f.Abholung);
+                arrFahrerFahrt.Add(f.ZustellungPLZ);
                 arrFahrerFahrt.Add(f.Zustellung);
                 arrFahrerFahrt.Add(f.KmFahrt);
                 kmFazit += f.KmFahrt;
@@ -350,18 +463,38 @@ namespace BWK
             }
             DataGridViewRow row = (DataGridViewRow)dataGridViewTable.Rows[0].Clone();
             dataGridViewTable.Rows.Add(row);
-
+            
             row = (DataGridViewRow)dataGridViewTable.Rows[0].Clone();
-            row.Cells[7].Value = kmFazit;
-            row.Cells[9].Value = betragFahrtFazit;
-            row.Cells[10].Value = exstrasFahrtFazit;
-            row.Cells[11].Value = kmFahrerFazit;
-            row.Cells[12].Value = betragFahrerFazit;
-            row.Cells[14].Value = bemergungFazit;
+            row.Cells[9].Value = "Gesamt";
+            row.Cells[10].Value = kmFazit;
+            row.Cells[12].Value = betragFahrtFazit;
+            row.Cells[13].Value = exstrasFahrtFazit;
+            row.Cells[14].Value = kmFahrerFazit;
+            //row.Cells[15].Value = betragFahrerFazit;
+            //row.Cells[16].Value = "Km-Preis";
+            //row.Cells[17].Value = bemergungFazit;
+
             dataGridViewTable.Rows.Add(row);
             //arrFahrerFahrtFazit.Add(kmFazit);
+            //arrFahrerFahrtFazit.Add(kmFazit);
+            //arrFahrerFahrtFazit.Add(kmFazit);
             //arrFahrerFahrtFazit.Add(betragFahrtFazit);
+            Bemerkung bemerkungExtras = new Bemerkung("Extras", bemergungFazit);
+            fahrer.BemerkungList.Insert(0, bemerkungExtras);
 
+            Bemerkung bemerkungBetrag = new Bemerkung("Km-Preis", betragFahrerFazit);
+            fahrer.BemerkungList.Insert(0, bemerkungBetrag);
+
+            //row = (DataGridViewRow)dataGridViewTable.Rows[0].Clone();
+            //dataGridViewTable.Rows.Add(row);
+
+            foreach (Bemerkung b in fahrer.BemerkungList)
+            {
+                row = (DataGridViewRow)dataGridViewTable.Rows[0].Clone();
+                row.Cells[15].Value = b.Preis;
+                row.Cells[16].Value = b.Typ;
+                dataGridViewTable.Rows.Add(row);
+            }
 
         }
 
@@ -382,7 +515,7 @@ namespace BWK
         }
 
         private void buttonLadungFahrtenTable_Click(object sender, EventArgs e)
-        {
+        {/*
             ObjWorkExcel = new Excel.Application(); //открыть эксель
             ObjWorkBook = ObjWorkExcel.Workbooks.Open(path, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing); //открыть файл
             foreach (Excel.Worksheet worksheet in ObjWorkBook.Worksheets)
@@ -390,6 +523,128 @@ namespace BWK
                 sheetName.Add(worksheet.Name);
             }
             FuellungMouts();
+            */
+        }
+
+        private void buttonExportFahrten_Click(object sender, EventArgs e)
+        {
+            Fahrer fahrer = (Fahrer)comboBoxFahrer.SelectedItem;
+            String mount = (String)comboBoxMounts.SelectedItem;
+            //String einstellung = this.path + "Einstellung.xlsx";
+            Debug.WriteLine(einstellung);
+            ObjWorkExcel = new Excel.Application(); //открыть эксель
+            ObjWorkBook = ObjWorkExcel.Workbooks.Open(this.einstellung, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing); //открыть файл
+            Excel.Worksheet worksheet = ObjWorkBook.Worksheets["Fahrten"];
+            String fahrerTabelleExport = "";
+            String fahrerName = "1";
+            int i = 3;
+            while (!fahrerName.Equals(""))
+            {
+                fahrerName = worksheet.Cells[i, 1].Text.ToString();
+                if (fahrer.NameFahrer.Equals(fahrerName))
+                {
+                    fahrerTabelleExport = this.path + worksheet.Cells[i, 2].Text.ToString();
+                    Debug.WriteLine(fahrerTabelleExport);
+                    ObjWorkBook.Close(0);
+                    ObjWorkExcel.Quit();
+                    break;
+                }
+                i++;
+            }
+            if (fahrerTabelleExport.Equals(""))
+            {
+                Debug.WriteLine("Es gibt keine Tabelle für " + fahrer.NameFahrer);
+                ObjWorkBook.Close(0);
+                ObjWorkExcel.Quit();
+            }
+            else
+            {
+                ExportFahrerTabelle(fahrerTabelleExport, fahrer, mount);
+            }
+            
+            //this.fahrtenTabellePath = this.path + worksheet.Cells[2, 2].Text.ToString();
+            //Debug.WriteLine(fahrtenTabellePath);
+        }
+
+        private void ExportFahrerTabelle(String _path, Fahrer fahrer, String mount)
+        {
+            Fahrten.ActiveForm.Enabled = false;
+            labelExport.Visible = true;
+            labelAnimation.Visible = true;
+            progressBar1.Value = 0;
+            progressBar1.Maximum = fahrer.Fahrten.Count;
+            ObjWorkExcel = new Excel.Application(); //открыть эксель
+            ObjWorkBook = ObjWorkExcel.Workbooks.Open(_path, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing); //открыть файл
+            Excel.Worksheet worksheet;
+            try
+            {
+                worksheet = ObjWorkBook.Worksheets[mount];
+            }
+            catch
+            {
+                Debug.WriteLine("Es gibt keine");
+                Excel.Worksheet worksheetVorlage = ObjWorkBook.Worksheets["Vorlage"];
+                worksheetVorlage.Copy(worksheetVorlage);
+                Excel.Worksheet worksheetNew = ObjWorkBook.Worksheets["Vorlage (2)"];
+                //worksheet = ObjWorkBook.Worksheets[mount];
+                worksheetNew.Name = mount;
+                worksheet = worksheetNew;
+                worksheet.Cells[2, "C"] = mount;
+            }
+
+            //Excel.Worksheet worksheet1 = ((Excel.Worksheet)Application.ActiveWorkbook.Worksheets[1]);
+            //Excel.Worksheet worksheet3 = ((Excel.Worksheet)Application.ActiveWorkbook.Worksheets[3]);
+            //worksheet1.Copy(worksheet3);
+
+            int i = 6;
+            int k = 1;
+            foreach (Fahrt fahrt in fahrer.Fahrten)
+            {
+                labelAnimation.Text = "";
+                worksheet.Cells[i, "A"] = k;
+                worksheet.Cells[i, "B"] = fahrt.Date;
+                worksheet.Cells[i, "C"] = fahrt.Fahrzeug_mz;
+                labelAnimation.Text = ".";
+                worksheet.Cells[i, "D"] = fahrt.Fahrzeug_typ;
+                worksheet.Cells[i, "E"] = fahrt.AbholungPLZ;
+                worksheet.Cells[i, "F"] = fahrt.Abholung;
+                labelAnimation.Text = "..";
+                worksheet.Cells[i, "G"] = fahrt.ZustellungPLZ;
+                worksheet.Cells[i, "H"] = fahrt.Zustellung;
+                worksheet.Cells[i, "I"] = fahrt.KmFahrer;
+                labelAnimation.Text = "...";
+                worksheet.Cells[i, "J"] = fahrt.BetragFahrer;
+                worksheet.Cells[i, "K"] = fahrt.BemerkungText;
+                worksheet.Cells[i, "L"] = fahrt.BemerkungPreis;
+                i++;
+                k++;
+                progressBar1.Value++;
+            }
+
+            foreach (Bemerkung bemerkung in fahrer.BemerkungList)
+            {
+                worksheet.Cells[i, "J"] = bemerkung.Preis;
+                worksheet.Cells[i, "K"] = bemerkung.Typ;
+                i++;
+            }
+
+            ObjWorkBook.Save();
+            ObjWorkBook.Close(0);
+            ObjWorkExcel.Quit();
+            labelAnimation.Visible = false;
+            labelExport.Visible = false;
+            Fahrten.ActiveForm.Enabled = true;
+            
+        }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+                // ввод в texBox только цифр и кнопки Backspace
+                char ch = e.KeyChar;
+                if (!Char.IsDigit(ch) && ch != 8 && ch !=44 && ch != 45)
+                {
+                    e.Handled = true;
+                }
         }
     }
 }
